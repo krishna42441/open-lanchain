@@ -8,9 +8,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import create_retrieval_chain
-from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.document_loaders import PyPDFDirectoryLoader
-from langchain.chains import retrieval_qa
 from langchain_community.vectorstores import FAISS
 import time
 
@@ -25,10 +23,10 @@ if "vector" not in st.session_state:
     try:
         st.session_state.embeddings = HuggingFaceEmbeddings()
         st.session_state.loader = PyPDFDirectoryLoader("./my_content")
-        st.session_state.docs = st.session_state.loader.load()
+        st.session_state.docs = st.session_state.loader.load()[:10]  # Load only 10 documents
 
         st.session_state.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-        st.session_state.final_documents = st.session_state.text_splitter.split_documents(st.session_state.docs[:50])
+        st.session_state.final_documents = st.session_state.text_splitter.split_documents(st.session_state.docs)
         st.session_state.vector = FAISS.from_documents(st.session_state.final_documents, st.session_state.embeddings)
     except requests.exceptions.ConnectionError as e:
         st.error(f"Failed to connect to the embeddings service: {e}")
