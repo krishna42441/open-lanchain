@@ -30,22 +30,21 @@ def load_documents():
     return vector_store
 
 def manage_memory():
-    # Clear cache if necessary
-    st.caching.clear_cache()
     # Run garbage collection
     gc.collect()
 
 st.session_state.vector = load_documents()
 
 # Streamlit UI
-st.title("ChatGroq Demo")
+st.title("langchain Bot")
+st.write("This is a chatbot  which uses langchain and Gemma model to answer any question based on a document in this case which is my resume, You can ask me any question on personal or professional quesions  ")
 
 llm = ChatGroq(groq_api_key=groq_api_key, model_name="Gemma-7b-It")
 
 prompt_template = ChatPromptTemplate.from_template(
 """
 Answer the questions based on the provided context only
-pretend you are sai krishna veeramaneni who is in the document and answer 
+pretend you are ai assistent for  sai krishna veeramaneni who is in the document and answer if you dont find content in the document  just say contact sai krishna with this email v.krishna2727@gmail.com
 
 please provide accurate response based on the question
 <context>
